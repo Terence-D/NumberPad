@@ -1,12 +1,10 @@
 package ca.coffeeshopstudio.numberpad;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -17,11 +15,14 @@ import java.util.Locale;
  */
 public class NumPadLayout extends LinearLayout implements View.OnClickListener {
 
-    private NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+    private OnValueUpdateListener listener;
+
     private int maxFractionDigits;
 
-    private String value;
+    private String displayValue;
     private String signOfValue = "-";
+
+    private BigDecimal actualValue = new BigDecimal(0);
 
     public NumPadLayout(Context context) {
         super(context);
@@ -48,12 +49,12 @@ public class NumPadLayout extends LinearLayout implements View.OnClickListener {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.numpad, this);
         //set our decimal value
-        maxFractionDigits = format.getMaximumFractionDigits();
+        maxFractionDigits = NumberFormat.getCurrencyInstance(Locale.getDefault()).getMaximumFractionDigits();
         updateValue(0);
         buildButtons();
     }
 
-    protected void buildButtons() {
+    private void buildButtons() {
         findViewById(R.id.btnDigit0).setOnClickListener(this);
         findViewById(R.id.btnDigit1).setOnClickListener(this);
         findViewById(R.id.btnDigit2).setOnClickListener(this);
@@ -73,8 +74,8 @@ public class NumPadLayout extends LinearLayout implements View.OnClickListener {
         //can't use switches in Libraries with Resources :(
         int id = v.getId();
         if (id == R.id.btnDigitBackspace) {
-            if (value != null && value.length() > 0) {
-                value = value.substring(0, value.length() - 1);
+            if (displayValue != null && displayValue.length() > 0) {
+                displayValue = displayValue.substring(0, displayValue.length() - 1);
                 updateDisplay();
             }
         }
@@ -118,59 +119,60 @@ public class NumPadLayout extends LinearLayout implements View.OnClickListener {
     }
 
     private void updateValue(int i) {
-        //initialize our value as necessary
-        if (value != null && value.length() > 0)
-            value += Integer.toString(i);
+        //initialize our displayValue as necessary
+        if (displayValue != null && displayValue.length() > 0)
+            displayValue += Integer.toString(i);
         else
-            value = Integer.toString(i);
+            displayValue = Integer.toString(i);
 
         updateDisplay();
     }
 
     private void updateDisplay() {
-        TextView txtValue = (TextView) findViewById(R.id.txtValue);
-
-        if (signOfValue.length() == 0) {
-            txtValue.setTextColor(Color.BLUE);
-        }
-        else {
-            txtValue.setTextColor(Color.RED);
-        }
-
-        int lengthOfInput = value.length();
+        int lengthOfInput = displayValue.length();
 
         //if we have less digits then fraction digits, pad the left side
         if (lengthOfInput < maxFractionDigits)
         {
             int padding = maxFractionDigits - lengthOfInput;
+
             while (padding >= 0)
             {
-                value = "0" + value;
+                displayValue = "0" + displayValue;
                 padding--;
             }
 
             //reget our length
-            lengthOfInput = value.length();
-
-            //now insert a decimal character
+            lengthOfInput = displayValue.length();
         }
 
-        String displayValue = signOfValue + value.substring(0, lengthOfInput - maxFractionDigits) + "." + value.substring(lengthOfInput - maxFractionDigits);
+        String leftOfDecimal = this.displayValue.substring(0, lengthOfInput - maxFractionDigits);
+        String rightOfDecimal = this.displayValue.substring(lengthOfInput - maxFractionDigits);
 
-        BigDecimal currencyValue = new BigDecimal(displayValue);
-        txtValue.setText(currencyValue.toString());
+        while (leftOfDecimal.startsWith("0") && leftOfDecimal.length() > 1)
+            leftOfDecimal = leftOfDecimal.substring(1);
+
+        String tempValue = signOfValue + leftOfDecimal + "." + rightOfDecimal;
+
+        actualValue = new BigDecimal(tempValue);
+        if (this.listener != null)
+            listener.onUpdate(tempValue);
     }
 
     public BigDecimal getValue() {
-        return new BigDecimal(value);
+        return actualValue;
     }
 
     public void setValue(BigDecimal newValue)
     {
-        value = newValue.toString();
+        displayValue = newValue.toString();
     }
 
     public void setDecimalPoints(int precision) {
         maxFractionDigits = precision;
+    }
+
+    public void setOnValueListener(OnValueUpdateListener listener) {
+        this.listener = listener;
     }
 }
