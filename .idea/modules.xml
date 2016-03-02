@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NumberPad.iml" filepath="$PROJECT_DIR$/NumberPad.iml" />
-      <module fileurl="file://$PROJECT_DIR$/numberpad/app.iml" filepath="$PROJECT_DIR$/numberpad/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/numberpad/numberpad.iml" filepath="$PROJECT_DIR$/numberpad/numberpad.iml" />
     </modules>
   </component>
