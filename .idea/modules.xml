@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/NumberPad.iml" filepath="$PROJECT_DIR$/NumberPad.iml" />
+      <module fileurl="file://$PROJECT_DIR$/numberpad/app.iml" filepath="$PROJECT_DIR$/numberpad/app.iml" />
+    </modules>
+  </component>
+</project>
