@@ -1,11 +1,13 @@
-# Project Name
+# Coffee Shop Studio Number Pad
+
+![alt tag](https://raw.githubusercontent.com/Terence-D/NumberPad/master/bin/screenshot.png)
 
 Designed for fast user input, this allows the display of a Number Pad layout right in your view - faster then loading the keyboard up.
 This is very basic and needs some work before ready for prime time.
 
 ## Installation
 
-TODO: Describe the installation process
+You can copy the bin/numberpad-debug.aar file into your libs folder then reference it in your gradle.  Only a debug version is supplied pre-compiled as this really isn't ready for production yet.  Alternatively pull down the library and incorporate it into your Android Studio project
 
 ## Usage
 
