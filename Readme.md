@@ -12,17 +12,19 @@ You can copy the bin/numberpad-debug.aar file into your libs folder then referen
 ## Usage
 
 1) In the Layout XML where you want to place it:
+```xml
     <ca.coffeeshopstudio.numberpad.NumPadLayout
         android:id="@+id/numpad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
+```
 2) Extend your Activity/Fragment to implement the OnValueUpdateListener interface
 
 3) Reference it in your code:
+```java
   NumPadLayout numLayout = (NumPadLayout) root.findViewById(R.id.numpad);
   numLayout.setOnValueListener(this);
-
+```
 4) In the onUpdate listener, add your relevant code to update whatever control necessary
 
 5) Make use of the following methods:
@@ -42,6 +44,7 @@ You can copy the bin/numberpad-debug.aar file into your libs folder then referen
 ## History
 
 0.1 March 1, 2016 - Initial Commit
+
 0.2 March 3, 2016 - Modified to use Callback instead of hard coded TextView for passing the value
 
 ## License
