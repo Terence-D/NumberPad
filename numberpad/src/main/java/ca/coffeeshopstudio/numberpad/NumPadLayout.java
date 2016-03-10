@@ -7,22 +7,14 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.util.Locale;
 
 /**
  * Created by terence on 1/20/2016. Copyright 2016
  */
 public class NumPadLayout extends LinearLayout implements View.OnClickListener {
 
+    NumPadValue npv = new NumPadValue();
     private OnValueUpdateListener listener;
-
-    private int maxFractionDigits;
-
-    private String displayValue;
-    private String signOfValue = "-";
-
-    private BigDecimal actualValue = new BigDecimal(0);
 
     public NumPadLayout(Context context) {
         super(context);
@@ -48,9 +40,6 @@ public class NumPadLayout extends LinearLayout implements View.OnClickListener {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.numpad, this);
-        //set our decimal value
-        maxFractionDigits = NumberFormat.getCurrencyInstance(Locale.getDefault()).getMaximumFractionDigits();
-        updateValue(0);
         buildButtons();
     }
 
@@ -74,102 +63,65 @@ public class NumPadLayout extends LinearLayout implements View.OnClickListener {
         //can't use switches in Libraries with Resources :(
         int id = v.getId();
         if (id == R.id.btnDigitBackspace) {
-            if (displayValue != null && displayValue.length() > 0) {
-                displayValue = displayValue.substring(0, displayValue.length() - 1);
-                updateDisplay();
-            }
+            npv.trim();
         }
         if (id == R.id.btnDigit0) {
-            updateValue(0);
+            npv.append(0);
         }
         if (id == R.id.btnDigit1) {
-            updateValue(1);
+            npv.append(1);
         }
         if (id == R.id.btnDigit2) {
-            updateValue(2);
+            npv.append(2);
         }
         if (id == R.id.btnDigit3) {
-            updateValue(3);
+            npv.append(3);
         }
         if (id == R.id.btnDigit4) {
-            updateValue(4);
+            npv.append(4);
         }
         if (id == R.id.btnDigit5) {
-            updateValue(5);
+            npv.append(5);
         }
         if (id == R.id.btnDigit6) {
-            updateValue(6);
+            npv.append(6);
         }
         if (id == R.id.btnDigit7) {
-            updateValue(7);
+            npv.append(7);
         }
         if (id == R.id.btnDigit8) {
-            updateValue(8);
+            npv.append(8);
         }
         if (id == R.id.btnDigit9) {
-            updateValue(9);
+            npv.append(9);
         }
         if (id == R.id.btnDigitInvert) {
-            if (signOfValue.length() == 0) //positive
-                signOfValue = "-";
-            else
-                signOfValue = "";
-            updateDisplay();
+            npv.isPositive = !npv.isPositive;
         }
-    }
-
-    private void updateValue(int i) {
-        //initialize our displayValue as necessary
-        if (displayValue != null && displayValue.length() > 0)
-            displayValue += Integer.toString(i);
-        else
-            displayValue = Integer.toString(i);
-
         updateDisplay();
     }
 
     private void updateDisplay() {
-        int lengthOfInput = displayValue.length();
-
-        //if we have less digits then fraction digits, pad the left side
-        if (lengthOfInput < maxFractionDigits)
-        {
-            int padding = maxFractionDigits - lengthOfInput;
-
-            while (padding >= 0)
-            {
-                displayValue = "0" + displayValue;
-                padding--;
-            }
-
-            //reget our length
-            lengthOfInput = displayValue.length();
-        }
-
-        String leftOfDecimal = this.displayValue.substring(0, lengthOfInput - maxFractionDigits);
-        String rightOfDecimal = this.displayValue.substring(lengthOfInput - maxFractionDigits);
-
-        while (leftOfDecimal.startsWith("0") && leftOfDecimal.length() > 1)
-            leftOfDecimal = leftOfDecimal.substring(1);
-
-        String tempValue = signOfValue + leftOfDecimal + "." + rightOfDecimal;
-
-        actualValue = new BigDecimal(tempValue);
         if (this.listener != null)
-            listener.onUpdate(tempValue);
+            listener.onUpdate(npv.toString());
     }
 
     public BigDecimal getValue() {
-        return actualValue;
+        return npv.getValue();
     }
 
     public void setValue(BigDecimal newValue)
     {
-        displayValue = newValue.toString();
+        npv.setValue(newValue);
+        updateDisplay();
     }
 
-    public void setDecimalPoints(int precision) {
-        maxFractionDigits = precision;
+    public void setPrecision(int precision) {
+        npv.setPrecision(precision);
+    }
+
+    public void setRoundingMode(int roundingMode) {
+        npv.setPrecision(roundingMode);
     }
 
     public void setOnValueListener(OnValueUpdateListener listener) {
