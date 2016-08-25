@@ -8,7 +8,7 @@ import java.util.Locale;
 /**
  * Created by terence on 3/7/2016. Copyright 2016
  */
-public class NumPadValue {
+class NumPadValue {
     public boolean isPositive = false;
     private int precision;
     private String value;
@@ -62,7 +62,6 @@ public class NumPadValue {
     }
 
     private String getNumericValue() {
-        System.out.println(value);
         String left = value.substring(0, value.length() - precision);
         String right = value.substring(value.length() - precision);
         return left + "." + right;
