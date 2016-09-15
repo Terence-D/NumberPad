@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NumberPad.iml" filepath="$PROJECT_DIR$/NumberPad.iml" />
       <module fileurl="file://$PROJECT_DIR$/NumberPad.iml" filepath="$PROJECT_DIR$/NumberPad.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NumberPadGitHub.iml" filepath="$PROJECT_DIR$/NumberPadGitHub.iml" />
+      <module fileurl="file://$PROJECT_DIR$/numberpad/numberpad.iml" filepath="$PROJECT_DIR$/numberpad/numberpad.iml" />
       <module fileurl="file://$PROJECT_DIR$/numberpad/numberpad.iml" filepath="$PROJECT_DIR$/numberpad/numberpad.iml" />
       <module fileurl="file://$PROJECT_DIR$/numberpad/numberpad.iml" filepath="$PROJECT_DIR$/numberpad/numberpad.iml" />
     </modules>
