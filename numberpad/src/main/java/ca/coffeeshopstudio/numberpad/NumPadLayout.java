@@ -15,6 +15,7 @@ public class NumPadLayout extends LinearLayout implements View.OnClickListener {
 
     NumPadValue npv = new NumPadValue();
     private OnValueUpdateListener listener;
+    private boolean absolute;
 
     public NumPadLayout(Context context) {
         super(context);
@@ -107,13 +108,28 @@ public class NumPadLayout extends LinearLayout implements View.OnClickListener {
     }
 
     public BigDecimal getValue() {
-        return npv.getValue();
+//        if (!absolute)
+            return npv.getValue();
+
+//        return new BigDecimal(Math.abs(npv.getValue().doubleValue()));
     }
 
     public void setValue(BigDecimal newValue)
     {
         npv.setValue(newValue);
         updateDisplay();
+    }
+
+    /**
+     * If the numberpad is absolute, hides
+     * @param value
+     */
+    public void isAbsolute(boolean value) {
+        this.absolute = value;
+        if (value)
+            findViewById(R.id.btnDigitInvert).setVisibility(INVISIBLE);
+        else
+            findViewById(R.id.btnDigitInvert).setVisibility(VISIBLE);
     }
 
     public void setPrecision(int precision) {
